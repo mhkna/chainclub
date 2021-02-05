@@ -5,9 +5,10 @@ require('chai')
   .should()
 
 contract('ChainClub', () => {
+  let chainclub
 
   before(async () => {
-    var chainclub = await ChainClub.deployed()
+    chainclub = await ChainClub.deployed()
   })
 
   describe('deployment', async () => {
@@ -24,4 +25,19 @@ contract('ChainClub', () => {
       assert.equal(name, 'ChainClub')
     })
   })
+
+  describe('posts', async () => {
+    let result
+    const hash = 'test123hash'
+
+    before(async () => {
+      result = await chainclub.addPost(hash, 'hello world', { from: author })
+    })
+
+    it('creates posts', async () => {
+      const image = await chainclub.posts(1)
+      assert.equal(image.text, 'hello world')
+    })
+  })
+
 })
