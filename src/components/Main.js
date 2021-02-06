@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Main extends Component {
+function Main() {
 
-  render() {
-    return (
-      <div>
-      </div>
-    );
-  }
+  return (
+    <div>
+      MAIN COMPONENT
+    </div>
+  );
+
 }
 
 export default Main;

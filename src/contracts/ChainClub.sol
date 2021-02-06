@@ -14,15 +14,19 @@ contract ChainClub {
   }
 
   event PostCreated (
-    uint id;
-    string hash;
-    string text;
-    address author;
+    uint id,
+    string hash,
+    string text,
+    address author
   );
 
-  function addPost(string memory _postHash, string memory _text) public {
+  function addPost(string memory postHash, string memory text) public {
+    require(bytes(postHash).length > 0);
+    require(bytes(text).length > 0);
+    require(msg.sender != address(0x0));
+
     postCount += 1;
-    posts[postCount] = Post(postCount, _postHash, _text, msg.sender);
-    emit PostCreated(postCount, _postHash, _text, msg.sender);
+    posts[postCount] = Post(postCount, postHash, text, msg.sender);
+    emit PostCreated(postCount, postHash, text, msg.sender);
   }
 }
