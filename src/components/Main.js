@@ -1,10 +1,10 @@
 import React from 'react';
 
-function Main() {
+function Main(props) {
 
   return (
     <div>
-      MAIN COMPONENT
+      {props.account}
     </div>
   );
 
