@@ -1,42 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Web3 from 'web3';
-// import './App.css';
-// import ChainClub from '../abis/ChainClub.json'
+import ChainClub from '../abis/ChainClub.json'
 import Main from './Main'
-
 
 function App() {
   const [loading, setLoading] = useState(true)
   const [account, setAccount] = useState('')
+  const [chainclub, setChainclub] = useState('')
+  const [postArr, setPostArr] = useState([])
+  //// TEMP
+  const renderCount = useRef(1)
 
   useEffect(() => {
-    loadWeb3()
-    setLoading(false)
+    loadData()
   }, [])
 
-  async function loadWeb3() {
-    if (window.ethereum) {
-      try {
-          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-          await setAccount(accounts[0])
-      } catch (error) {
-          window.alert('User denied account access.')
-      }
+  useEffect(() => {
+    renderCount.current = renderCount.current + 1
+  })
+
+  async function loadData() {
+    const web3 = await new Web3(Web3.givenProvider || 'http://localhost:7545')
+    const accounts = await web3.eth.getAccounts()
+    setAccount(accounts[0])
+    const networkId = await web3.eth.net.getId()
+    const chainclub = await web3.eth.Contract(ChainClub.abi, ChainClub.networks[networkId].address)
+    setChainclub(chainclub)
+    const postCount = await chainclub.methods.postCount().call()
+    for (let i = 1; i <= postCount; i++) {
+      const post = await chainclub.methods.posts(i).call()
+      setPostArr(prevPostArr => [...prevPostArr, post])
     }
-    else if (window.web3) {
-      window.web3 = new Web3(window.web3.currentProvider)
-    }
-    else {
-      window.alert('This requires an Ethereum compatible browser or extension.')
-    }
+    setLoading(false)
   }
 
   return (
     <div>
       { loading
-        ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
+        ? <div>Loading...</div>
         : <Main account={account}/>
       }
+      <div>Rendered {renderCount.current} times.</div>
     </div>
   );
 }
