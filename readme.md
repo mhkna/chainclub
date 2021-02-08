@@ -1,1 +1,1 @@
-React, Ipfs, Web3
+Solidity, React, Ipfs, Web3
