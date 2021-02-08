@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Web3 from 'web3';
 import ChainClub from '../abis/ChainClub.json'
 import Main from './Main'
-// import fs from 'promise-fs'
 
 const ipfsClient = require('ipfs-http-client')
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' })
